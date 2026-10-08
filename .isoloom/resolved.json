@@ -1,0 +1,144 @@
+{
+  "generated_by_isoloom": "from isoloom.yml; don't edit: change the spec and run `isoloom generate` (`isoloom check` fails when this file is out of date)",
+  "resolved_version": 1,
+  "name": "vulhub-python-unpickle",
+  "instance": null,
+  "inputs": [],
+  "networks": {
+    "lab": {
+      "cidr": "10.61.24.0/24",
+      "docker_cidr": "10.61.24.0/24",
+      "internet": false,
+      "gateway": null,
+      "gateway_address": "10.61.24.1",
+      "router": null,
+      "controller": "10.61.24.253"
+    }
+  },
+  "reach": [],
+  "machines": {
+    "flask": {
+      "access": false,
+      "supplied": false,
+      "shapes": [
+        "docker"
+      ],
+      "arch": "amd64",
+      "os": null,
+      "windows": false,
+      "addresses": {
+        "lab": "10.61.24.10"
+      },
+      "docker_addresses": {
+        "lab": "10.61.24.10"
+      },
+      "services": [
+        {
+          "port": 8000,
+          "name": "web",
+          "http": true,
+          "publish": 8000
+        }
+      ],
+      "depends_on": [],
+      "inputs": [],
+      "volumes": {},
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 256,
+        "disk_gb": 20
+      },
+      "gateway_of": [],
+      "routes": [],
+      "default_gateway": null,
+      "offline": true
+    }
+  },
+  "start_order": [
+    "flask"
+  ],
+  "clones": {},
+  "tools": {},
+  "groups": {},
+  "router": null,
+  "controller": {
+    "addresses": {
+      "lab": "10.61.24.253"
+    }
+  },
+  "published": [
+    {
+      "machine": "flask",
+      "port": 8000,
+      "host_port": 8000
+    }
+  ],
+  "targets": {
+    "possible": [
+      "docker",
+      "hosted",
+      "docker-vm",
+      "cloud-docker",
+      "kubernetes"
+    ],
+    "generated": [
+      "docker",
+      "hosted",
+      "docker-vm",
+      "cloud-docker",
+      "kubernetes"
+    ],
+    "refused": {},
+    "not_possible": {
+      "hybrid": "only when some machines are containers and others are VMs",
+      "vagrant": "needs `vm:` on flask",
+      "proxmox": "needs `vm:` on flask",
+      "cloud-vm": "needs `vm:` on flask",
+      "external": "needs `external:` on flask"
+    }
+  },
+  "checks": {
+    "default_position": "networks",
+    "positions": [
+      {
+        "position": "networks",
+        "machine": null,
+        "runner": "isoloom-check",
+        "checks": [
+          {
+            "name": "the application answers",
+            "derived": false,
+            "kind": "http",
+            "target": "http://flask:8000/",
+            "expect": "200",
+            "wait": 60
+          },
+          {
+            "name": "the application greets the guest",
+            "derived": false,
+            "kind": "script",
+            "target": "checks/app.sh",
+            "expect": "",
+            "wait": 30
+          }
+        ]
+      },
+      {
+        "position": "flask",
+        "machine": "flask",
+        "runner": "isoloom-check-flask",
+        "checks": [
+          {
+            "name": "no internet from flask",
+            "derived": true,
+            "kind": "http",
+            "target": "http://1.1.1.1/",
+            "expect": "blocked",
+            "wait": 0
+          }
+        ]
+      }
+    ]
+  },
+  "message": "A Flask application answers at http://localhost:8000/ and calls you Guest.\nWhere does it look for your name, and how does it decode it?\n"
+}

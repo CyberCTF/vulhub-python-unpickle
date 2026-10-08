@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://www.isoloom.com/schema/v1.json
+# Python pickle deserialization (Vulhub, by phith0n and the Vulhub contributors) as an Isoloom spec:
+# Vulhub's python/unpickle, vendored in build/flask/app/: the published image
+# vulhub/flask:1.1.1 with Vulhub's app.py copied in (build/flask/).
+# `isoloom generate`, then `isoloom run docker`.
+version: 1
+name: vulhub-python-unpickle
+
+networks:
+  lab: { cidr: 10.61.24.0/24, internet: false }
+
+machines:
+  flask:
+    networks: { lab: 10 }
+    services: [{ port: 8000, name: web, http: true, publish: 8000 }]
+    resources: { cpus: 1, memory_mb: 256 }
+    docker:
+      build: build/flask
+
+checks:
+  - name: the application answers
+    http: http://flask:8000/
+    wait: 60
+  - name: the application greets the guest
+    script: checks/app.sh
+    wait: 30
+
+message: |
+  A Flask application answers at http://localhost:{{ machines.flask.services.0.publish }}/ and calls you Guest.
+  Where does it look for your name, and how does it decode it?

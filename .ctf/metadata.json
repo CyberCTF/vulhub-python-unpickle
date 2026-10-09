@@ -4,11 +4,5 @@
   "question": "Craft a malicious pickle in the user cookie to run commands on the server and get a shell.",
   "category": "WEB",
   "difficulty": 2,
-  "evidence_kind": "SECRET",
-  "capabilities": [
-    "insecure-deserialization",
-    "python-pickle",
-    "remote-code-execution",
-    "cookie-tampering"
-  ]
+  "evidence_kind": "SECRET"
 }

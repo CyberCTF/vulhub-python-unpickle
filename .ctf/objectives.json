@@ -1,0 +1,66 @@
+{
+  "objectives": [
+    {
+      "key": "main",
+      "title": "Read the flag",
+      "prompt": "Forge the user cookie so the server runs your code when it decodes it, then read /ctf/flag.",
+      "check": {
+        "evidence": "SECRET",
+        "format": "FLAG{%s}"
+      },
+      "dev": "FLAG{dev-vulhub-python-unpickle}",
+      "hints": [
+        "The application greets you by a name it reads from a cookie. Look at how the cookie is encoded and what the server does with it after decoding.",
+        "Python's pickle rebuilds objects by calling functions the data names. The flag is at /ctf/flag."
+      ],
+      "steps": [
+        {
+          "key": "cookie",
+          "title": "Find the input",
+          "prompt": "Which cookie carries the value the server decodes? (cookie name)",
+          "check": {
+            "answer": [
+              "user"
+            ]
+          }
+        },
+        {
+          "key": "encoding",
+          "title": "Name the encoding",
+          "prompt": "How is the cookie value encoded before it is unpickled?",
+          "check": {
+            "answer": [
+              "base64",
+              "base 64",
+              "b64"
+            ]
+          }
+        },
+        {
+          "key": "class",
+          "title": "Name the weakness",
+          "prompt": "Which vulnerability class is this? (two words)",
+          "check": {
+            "answer": [
+              "insecure deserialization",
+              "deserialization",
+              "unsafe deserialization",
+              "pickle deserialization"
+            ]
+          }
+        },
+        {
+          "key": "module",
+          "title": "Name the module",
+          "prompt": "Which Python module deserializes the value? (module name)",
+          "check": {
+            "answer": [
+              "pickle",
+              "cpickle"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
